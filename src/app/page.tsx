@@ -30,7 +30,7 @@ const Page: React.FC = () => {
               <p className="text-gray-700">
                 Access an overview of your financial performance, including charts and insights across different sectors.
               </p>
-              <Link href="/Dashboard">
+              <Link href="/dashboard">
                 <a className="text-blue-600 hover:underline">Go to Dashboard</a>
               </Link>
             </CardContent>
@@ -45,7 +45,7 @@ const Page: React.FC = () => {
               <p className="text-gray-700">
                 Manage restaurant sales, inventory, and reports with real-time insights.
               </p>
-              <Link href="/RestaurantPos">
+              <Link href="/restaurant">
                 <a className="text-blue-600 hover:underline">Manage Restaurant POS</a>
               </Link>
             </CardContent>
