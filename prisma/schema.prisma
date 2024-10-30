@@ -9,28 +9,139 @@ datasource db {
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(USER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
 
-model Invoice {
-  id        String   @id @default(cuid())
-  total     Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  items     Item[]
+enum Role {
+  ADMIN
+  MANAGER
+  WAITER
+  CHEF
+  CASHIER
+  USER
 }
 
-model Item {
-  id        String  @id @default(cuid())
-  name      String
-  quantity  Int
-  price     Float
-  invoiceId String
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+model MenuItem {
+  id          String    @id @default(cuid())
+  name        String
+  price       Float
+  category    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  kotItems    KOTItem[]
+}
+
+model KOT {
+  id          String    @id @default(cuid())
+  tableNumber Int
+  status      KOTStatus @default(PENDING)
+  items       KOTItem[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model KOTItem {
+  id          String    @id @default(cuid())
+  quantity    Int
+  notes       String?
+  menuItem    MenuItem  @relation(fields: [menuItemId], references: [id])
+  menuItemId  String
+  kot         KOT       @relation(fields: [kotId], references: [id])
+  kotId       String
+}
+
+enum KOTStatus {
+  PENDING
+  PREPARING
+  READY
+  SERVED
+}
+
+model Invoice {
+  id            String    @id @default(cuid())
+  invoiceNumber String    @unique
+  customerName  String?
+  totalAmount   Float
+  status        InvoiceStatus @default(UNPAID)
+  items         InvoiceItem[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model InvoiceItem {
+  id          String    @id @default(cuid())
+  name        String
+  quantity    Int
+  price       Float
+  invoice     Invoice   @relation(fields: [invoiceId], references: [id])
+  invoiceId   String
+}
+
+enum InvoiceStatus {
+  PAID
+  UNPAID
+  CANCELLED
+}
+
+model InventoryItem {
+  id          String    @id @default(cuid())
+  name        String
+  quantity    Int
+  unit        String
+  reorderLevel Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model PurchaseOrder {
+  id          String    @id @default(cuid())
+  supplierName String
+  status      POStatus  @default(PENDING)
+  items       PurchaseOrderItem[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model PurchaseOrderItem {
+  id          String    @id @default(cuid())
+  name        String
+  quantity    Int
+  price       Float
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  purchaseOrderId String
+}
+
+enum POStatus {
+  PENDING
+  APPROVED
+  RECEIVED
+  CANCELLED
+}
+
+model Requisition {
+  id          String    @id @default(cuid())
+  requestedBy String
+  status      RequisitionStatus @default(PENDING)
+  items       RequisitionItem[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model RequisitionItem {
+  id          String    @id @default(cuid())
+  name        String
+  quantity    Int
+  requisition Requisition @relation(fields: [requisitionId], references: [id])
+  requisitionId String
+}
+
+enum RequisitionStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
