@@ -126,6 +126,3 @@ jobs:
         run: |
           gcloud app deploy --quiet
           
-author:
-  name: Ally Elvis Nzeyimana
-  email: naelvis6569@gmail.com
