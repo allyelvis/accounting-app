@@ -37,5 +37,11 @@
     "prettier": "^3.3.3",
     "prisma": "^5.21.1",
     "typescript": "^5.6.3"
-  }
+  },
+  "name": "accounting-app",
+  "version": "1.0.0",
+  "description": "![Build Status](https://github.com/AllyElvis/accounting-app/actions/workflows/main.yml/badge.svg) ![License](https://img.shields.io/badge/license-MIT-green) ![Version](https://img.shields.io/badge/version-0.1.0-blue)",
+  "main": "jest.config.js",
+  "author": "",
+  "license": "ISC"
 }
