@@ -1,13 +1,13 @@
-import { useSession } from 'next-auth/react'
-import KOTManagement from '../components/KOTManagement'
-import KitchenPanel from '../components/KitchenPanel'
-import WaiterPanel from '../components/WaiterPanel'
+import { useSession } from "next-auth/react";
+import KOTManagement from "../components/KOTManagement";
+import KitchenPanel from "../components/KitchenPanel";
+import WaiterPanel from "../components/WaiterPanel";
 
 export default function Restaurant() {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
 
   if (!session) {
-    return <p>Access denied. Please sign in.</p>
+    return <p>Access denied. Please sign in.</p>;
   }
 
   return (
@@ -17,5 +17,5 @@ export default function Restaurant() {
       <KitchenPanel />
       <WaiterPanel />
     </div>
-  )
+  );
 }

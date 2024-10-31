@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js (Latest Version)
         uses: actions/setup-node@v2
         with:
-          node-version: '18.x' # Latest LTS or modify as needed
+          node-version: "18.x" # Latest LTS or modify as needed
 
       - name: Install Dependencies with npm
         run: npm ci
@@ -38,7 +38,7 @@ jobs:
       - name: Setup Node.js (Latest Version)
         uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
+          node-version: "18.x"
 
       - name: Install Dependencies with npm
         run: npm ci
@@ -69,7 +69,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
+          node-version: "18.x"
 
       - name: Build Project
         run: npm run build
@@ -92,7 +92,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
+          node-version: "18.x"
 
       - name: Build Project for GitHub Pages
         run: npm run build && npx next export
@@ -113,7 +113,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
+          node-version: "18.x"
 
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -125,4 +125,3 @@ jobs:
       - name: Deploy to Google App Engine
         run: |
           gcloud app deploy --quiet
-          

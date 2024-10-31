@@ -1,17 +1,17 @@
-import { Server } from 'socket.io'
+import { Server } from "socket.io";
 
 const ioHandler = (req, res) => {
   if (!res.socket.server.io) {
-    const io = new Server(res.socket.server)
-    res.socket.server.io = io
+    const io = new Server(res.socket.server);
+    res.socket.server.io = io;
 
-    io.on('connection', socket => {
-      socket.on('update-data', data => {
-        socket.broadcast.emit('data-updated', data)
-      })
-    })
+    io.on("connection", (socket) => {
+      socket.on("update-data", (data) => {
+        socket.broadcast.emit("data-updated", data);
+      });
+    });
   }
-  res.end()
-}
+  res.end();
+};
 
-export default ioHandler
+export default ioHandler;
