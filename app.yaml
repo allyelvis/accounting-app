@@ -1,0 +1,5 @@
+runtime: nodejs14
+handlers:
+  - url: /.*
+    static_files: out/index.html
+    upload: out/index.html

@@ -43,7 +43,7 @@ const WaiterPanel: React.FC = () => {
   const markAsServed = async (kotId: string) => {
     // This is a placeholder and should be replaced with actual API call
     setKots(kots.map(kot => 
-      kot.id === kotId ? { ...kot, status: 'SERVED' } : kot
+      kot.id === kotId ? { ...kot, status:  'SERVED' } : kot
     ))
   }
 
