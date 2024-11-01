@@ -1,52 +1,101 @@
-// webpack.config.js
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
-  // Specify the mode (development or production)
-  mode: 'development', // or 'production'
+  webpack: (config, { isServer }) => {
+    // Modify the existing Webpack configuration
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname), // Alias for root directory
+    };
 
-  // Entry point for your application
-  entry: './src/index.js', // Adjust according to your entry point
+    // Add plugins
+    config.plugins.push(
+      new MiniCssExtractPlugin({
+        filename: '[name].[contenthash].css',
+        chunkFilename: '[id].[contenthash].css',
+      }),
+      new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, 'public/index.html'), // Customize your template
+      }),
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'static',
+        openAnalyzer: false,
+      })
+    );
 
-  // Output configuration
-  output: {
-    path: path.resolve(__dirname, 'dist'), // Output directory
-    filename: 'bundle.js', // Output file name
-  },
-
-  // Loaders configuration
-  module: {
-    rules: [
+    // Add loaders for different file types
+    config.module.rules.push(
+      // TypeScript loader
       {
-        test: /\.jsx?$/, // Process JavaScript and JSX files
+        test: /\.tsx?$/,
+        use: 'ts-loader',
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'], // Transpile ES6 and React
-          },
-        },
       },
+      // CSS and SCSS loaders
       {
-        test: /\.css$/, // Process CSS files
-        use: ['style-loader', 'css-loader'], // Loaders for CSS files
+        test: /\.s[ac]ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ],
       },
-      // Add more loaders as needed (e.g., for images, fonts, etc.)
-    ],
+      // CSS loader
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+        ],
+      },
+      // Image loader
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[hash].[ext]',
+              outputPath: 'images/',
+              publicPath: 'images/',
+            },
+          },
+        ],
+      },
+      // Fonts loader
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[hash].[ext]',
+              outputPath: 'fonts/',
+              publicPath: 'fonts/',
+            },
+          },
+        ],
+      }
+    );
+
+    // Optimize CSS
+    if (!isServer) {
+      config.optimization.minimizer.push(
+        new CssMinimizerPlugin()
+      );
+    }
+
+    return config;
   },
 
-  // Plugins configuration
-  plugins: [
-    // Add any required plugins here (e.g., HtmlWebpackPlugin)
-  ],
-
-  // Development configuration
-  devtool: 'source-map', // Enable source maps for debugging
-
-  // Development server configuration
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'), // Serve content from this directory
-    compress: true, // Enable gzip compression
-    port: 3000, // Port to run the dev server
+  // Next.js specific configuration options
+  reactStrictMode: true,
+  images: {
+    domains: ['example.com'], // Add allowed image domains here
   },
+  // Custom Webpack entry and output settings can go here if needed
 };
